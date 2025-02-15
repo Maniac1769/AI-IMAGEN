@@ -4,7 +4,6 @@ import { Configuration, OpenAIApi } from "openai";
 
 dotenv.config();
 
-
 // Setup open ai api key
 console.log('API Key:', process.env.OPENAI_API_KEY); // Debug the API key
 const configuration = new Configuration({
@@ -17,12 +16,12 @@ export const generateImage = async (req, res, next) => {
   try {
     const { prompt } = req.body;
 
-    const response = await openai.images.generate({
-    model: "dall-e-3",
-    prompt: "a white siamese cat",
-    n: 1,
-    size: "1024x1024",
-  });
+    const response = await openai.createImage({
+      prompt,
+      n: 1,
+      size: "1024x1024",
+      response_format: "b64_json",
+    });
     const generatedImage = response.data.data[0].b64_json;
     res.status(200).json({ photo: generatedImage });
   } catch (error) {
